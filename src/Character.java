@@ -48,7 +48,8 @@ public class Character implements RPGcharactor, Fight {
 
     public int getHp(int level) {
         int accessoryHp = accessories.stream().mapToInt(Accessory::getHp).sum();
-        return hp + (10 * level) + accessoryHp;
+        hp =  hp + (10 * level) + accessoryHp;
+        return hp;
     }
 
     public int getLevel() {
@@ -58,24 +59,28 @@ public class Character implements RPGcharactor, Fight {
     public int getDef(int level) {
         int accessoryDef = accessories.stream().mapToInt(Accessory::getDefense).sum();
         int equipmentDef = equipments.stream().mapToInt(Equipment::getDefense).sum();
-        return accessoryDef + equipmentDef + (10 * level) + def;
+        def = accessoryDef + equipmentDef + (10 * level) + def;
+        return def;
     }
 
     public int getAtk(int level) {
         int accessoryAtk = equipments.stream().mapToInt(Equipment::getDamage).sum();
-        return accessoryAtk + (10 * level) + atk;
+        atk = accessoryAtk + (10 * level) + atk;
+        return atk;
     }
 
     public int getMana(int level) {
         int accessoryMana = accessories.stream().mapToInt(Accessory::getMana).sum();
         int equipmentMana = equipments.stream().mapToInt(Equipment::getMana).sum();
-        return accessoryMana + equipmentMana + (2 * level) + mana;
+        mana = accessoryMana + equipmentMana + (2 * level) + mana;
+        return mana;
     }
 
     public int getRunSpeed(int level) {
         int speedPlus = accessories.stream().mapToInt(Accessory::getSpeed).sum();
         int speedMinus = equipments.stream().mapToInt(Equipment::getSpeed).sum();
-        return (level) + speedPlus + runSpeed - (speedMinus);
+        runSpeed = (level) + speedPlus + runSpeed - (speedMinus);
+        return runSpeed;
     }
 
     public String getName() {
