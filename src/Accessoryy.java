@@ -1,31 +1,31 @@
 public class Accessoryy implements Accessory {
     private String name;
-    private int Hp;
-    private int DefUp;
-    private int Max_manaUp;
+    private int hp;
+    private int defUp;
+    private int maxManaUp;
     private int speed;
 
-    public Accessoryy(String name, int Hp, int DefUp, int Max_manaUp, int speed) {
+    private Accessoryy(String name, int hp, int defUp, int maxManaUp, int speed) {
         this.name = name;
-        this.Hp = Hp;
-        this.DefUp = DefUp;
-        this.Max_manaUp = Max_manaUp;
-        this.speed = speed;
+        this.hp = Math.max(0, hp);  // Ensure non-negative values
+        this.defUp = Math.max(0, defUp);
+        this.maxManaUp = Math.max(0, maxManaUp);
+        this.speed = Math.max(0, speed);
     }
 
     @Override
     public int getHp() {
-        return Hp;
+        return hp;
     }
 
     @Override
     public int getDefense() {
-        return DefUp;
+        return defUp;
     }
 
     @Override
     public int getMana() {
-        return Max_manaUp;
+        return maxManaUp;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Accessoryy implements Accessory {
         return name;
     }
 
-    public static Accessoryy createAccessory(String name, int Hp, int DefUp, int Max_manaUp, int speed) {
-        return new Accessoryy(name, Hp, DefUp, Max_manaUp, speed);
+    public static Accessoryy createAccessory(String name, int hp, int defUp, int maxManaUp, int speed) {
+        return new Accessoryy(name, hp, defUp, maxManaUp, speed);
     }
 }
