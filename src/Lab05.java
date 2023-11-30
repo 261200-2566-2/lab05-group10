@@ -14,36 +14,13 @@ public class Lab05 {
         equipmentList.add(armor);
         accessorieList.add(ring);
         warrior.equipWeapon(equipmentList);
-        System.out.println("--------------------------------------------------------");
-        System.out.println("ชื่อ: " + warrior.getName());
-        System.out.println("อาชีพ: " + warrior.getJob());
-        System.out.println("Level: " + warrior.getLevel());
-        System.out.println("HP: " + warrior.getHp(warrior.getLevel()));
-        System.out.println("Attack: " + warrior.getAtk(warrior.getLevel()));
-        System.out.println("Defense: " + warrior.getDef(warrior.getLevel()));
-        System.out.println("Mana: " + warrior.getMana(warrior.getLevel()));
-        System.out.println("Run Speed: " + warrior.getRunSpeed(warrior.getLevel()));
-        System.out.println("Xp: " + warrior.getXp());
-        System.out.println("Max xp: " + warrior.getMaxXp());
-        System.out.println("--------------------------------------------------------");
+        Character.Display(warrior);
         warrior.levelUp();
         warrior.gainXp(300);
         warrior.levelUp();
         warrior.equipAccessory(accessorieList);
         System.out.println("LevelUp Test");
-        System.out.println("--------------------------------------------------------");
-        System.out.println("ชื่อ: " + warrior.getName());
-        System.out.println("อาชีพ: " + warrior.getJob());
-        System.out.println("Level: " + warrior.getLevel());
-        System.out.println("HP: " + warrior.getHp(warrior.getLevel()));
-        System.out.println("Attack: " + warrior.getAtk(warrior.getLevel()));
-        System.out.println("Defense: " + warrior.getDef(warrior.getLevel()));
-        System.out.println("Mana: " + warrior.getMana(warrior.getLevel()));
-        System.out.println("Run Speed: " + warrior.getRunSpeed(warrior.getLevel()));
-        System.out.println("Xp: " + warrior.getXp());
-        System.out.println("Max xp: " + warrior.getMaxXp());
-        System.out.println("--------------------------------------------------------");
-        
+        Character.Display(warrior);
 
         Character kiana = Character.createCharacter("Kiana", "Mage", 200, 50);
         Weapon kianagun = Weapon.createWeapon("Domain of the void","Mage",600,0,500,25);
@@ -54,18 +31,7 @@ public class Lab05 {
         kianaEquipmentlist.add(kianagun);
         kiana.levelUp();
         kiana.equipWeapon(kianaEquipmentlist);
-        System.out.println("--------------------------------------------------------");
-        System.out.println("ชื่อ: " + kiana.getName());
-        System.out.println("อาชีพ: " + kiana.getJob());
-        System.out.println("Level: " + kiana.getLevel());
-        System.out.println("HP: " + kiana.getHp(kiana.getLevel()));
-        System.out.println("Attack: " + kiana.getAtk(kiana.getLevel()));
-        System.out.println("Defense: " + kiana.getDef(kiana.getLevel()));
-        System.out.println("Mana: " + kiana.getMana(kiana.getLevel()));
-        System.out.println("Run Speed: " + kiana.getRunSpeed(kiana.getLevel()));
-        System.out.println("Xp: " + kiana.getXp());
-        System.out.println("Max xp: " + kiana.getMaxXp());
-        System.out.println("--------------------------------------------------------");
+        Character.Display(kiana);
         
         while (warrior.isAlive() && kiana.isAlive()) {
             warrior.attack(kiana);

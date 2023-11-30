@@ -130,4 +130,18 @@ public class Character implements RPGcharactor, Fight {
     public boolean isAlive() {
         return hp > 0;
     }
+    public static void Display(Character character){
+        System.out.println("--------------------------------------------------------");
+        System.out.println("ชื่อ: " + character.getName());
+        System.out.println("อาชีพ: " + character.getJob());
+        System.out.println("Level: " + character.getLevel());
+        System.out.println("HP: " + character.getHp(character.getLevel()));
+        System.out.println("Attack: " + character.getAtk(character.getLevel()));
+        System.out.println("Defense: " + character.getDef(character.getLevel()));
+        System.out.println("Mana: " + character.getMana(character.getLevel()));
+        System.out.println("Run Speed: " + character.getRunSpeed(character.getLevel()));
+        System.out.println("Xp: " + character.getXp());
+        System.out.println("Max xp: " + character.getMaxXp());
+        System.out.println("--------------------------------------------------------");
+    }
 }
