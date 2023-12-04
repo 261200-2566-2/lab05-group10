@@ -1,81 +1,144 @@
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class Mage {
-//    private String name , Job;
-//    private int level , Hp , Exp , Max_Exp , Max_Hp = 100 , Atk , Def , mana , Max_Mana = 200 , runSpeed;
-//    private List<Equipment> Equipments;
-//
-//    public Mage(String name, String Job) {
-//        this.name = name;
-//        this.Job = Job;
-//        this.level = 1;
-//        this.Exp = 0;
-//        this.Max_Exp = 100;
-//        this.Hp = Max_Hp;
-//        this.Atk = 10;
-//        this.Def = 5;
-//        this.mana = Max_Mana;
-//        this.runSpeed = 10;
-//        this.Equipments = new ArrayList<>();
-//    }
-//    public void equipAccessory(List<Equipment> equipmentList) {
-//        for (Equipment equipment : equipmentList) {
-//            if (equipment.getJob() == null || !equipment.getJob().equals(this.Job)) {
-//                System.out.println(this.name + " Can't equip " + equipment.getName());
-//            } else {
-//                this.Equipments.add(equipment);
-//                System.out.println(this.name + " Can put " + equipment.getName());
-//            }
-//        }
-//    }
-//
-//    public void display(String name ,String job ){
-//        Mage mage = new Mage(name,job);
-//        System.out.println("-------------------------------------------");
-//        System.out.println("Mage Stats:");
-//        System.out.println("-------------------------------------------");
-//        System.out.println("HP: " + mage.getHp(mage.getLevel()));
-//        System.out.println("ATK: " + mage.getAtk(mage.getLevel()));
-//        System.out.println("DEF: " + mage.getDef(mage.getLevel()));
-//        System.out.println("Mana: " + mage.getMana(mage.getLevel()));
-//        System.out.println("Run Speed: " + mage.getRunSpeed(mage.getLevel()));
-//        System.out.println("-------------------------------------------");
-//    }
-//
-//    public void UpLevel(){
-//        while (this.Exp >= this.Max_Exp){
-//            this.level++;
-//            this.Exp = this.Exp-this.Max_Exp;
-//            this.Max_Hp = (int) (this.Max_Exp*1.2);
-//        }
-//    }
-//
-//    public int getHp(int level) {
-//        return Hp + (5 * level);
-//    }
-//
-//    public int getLevel() {
-//        return level;
-//    }
-//
-//    public int getDef(int level) {
-//        int accessoryDef = Equipments.stream().mapToInt(Equipment::getDefense).sum();
-//        return accessoryDef + (5 * level) + Def;
-//    }
-//
-//    public int getAtk(int level) {
-//        int accessoryAtk = Equipments.stream().mapToInt(Equipment::getDamage).sum();
-//        return accessoryAtk + (15 * level) + Atk;
-//    }
-//
-//    public int getMana(int level) {
-//        int accessoryMana = Equipments.stream().mapToInt(Equipment::getMana).sum();
-//        return accessoryMana + (10 * level) + mana;
-//    }
-//
-//    public int getRunSpeed(int level) {
-//        int accessorySpeed = Equipments.stream().mapToInt(Equipment::getSpeed).sum();
-//        return (level) + runSpeed - accessorySpeed;
-//    }
-//}
+import java.util.ArrayList;
+import java.util.List;
+
+public class Mage implements RPGcharactor, Fight {
+    private String name, job;
+    private int level, hp, maxHp = 1000, atk, def, mana, maxMana = 100, runSpeed;
+    private int xp = 0, maxXp = 1000;
+    private List<Equipment> equipments;
+    private List<Accessory> accessories;
+
+    public Mage(String name, String job, int atk, int def) {
+        this.name = name;
+        this.job = job;
+        this.level = 1;
+        this.hp = maxHp;
+        this.atk = atk;
+        this.def = def;
+        this.mana = maxMana;
+        this.runSpeed = 50;
+        this.equipments = new ArrayList<>();
+        this.accessories = new ArrayList<>();
+    }
+
+    public void equipWeapon(List<Equipment> equipmentList) {
+        for (Equipment equipment : equipmentList) {
+            if (equipment.getJob() == null || !equipment.getJob().equals(this.job)) {
+                System.out.println(this.name + " cannot equip " + equipment.getName());
+            } else {
+                this.equipments.add(equipment);
+                System.out.println(this.name + " equipped " + equipment.getName());
+            }
+        }
+    }
+
+    public void equipAccessory(List<Accessory> accessoryList) {
+        this.accessories.addAll(accessoryList);
+        accessoryList.forEach(accessory -> System.out.println(this.name + " equipped " + accessory.getName()));
+    }
+
+    public void levelUp() {
+        this.maxXp = 1000 * level;
+        while (this.xp >= this.maxXp) {
+            this.level++;
+            this.xp = this.xp - this.maxXp;
+            this.maxXp = 1000 * (2 * level);
+        }
+    }
+
+    public int getHp(int level) {
+        int accessoryHp = accessories.stream().mapToInt(Accessory::getHp).sum();
+        hp =  hp + (10 * level) + accessoryHp;
+        return hp;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getDef(int level) {
+        int accessoryDef = accessories.stream().mapToInt(Accessory::getDefense).sum();
+        int equipmentDef = equipments.stream().mapToInt(Equipment::getDefense).sum();
+        def = accessoryDef + equipmentDef + (10 * level) + def;
+        return def;
+    }
+
+    public int getAtk(int level) {
+        int accessoryAtk = equipments.stream().mapToInt(Equipment::getDamage).sum();
+        atk = accessoryAtk + (10 * level) + atk;
+        return atk;
+    }
+
+    public int getMana(int level) {
+        int accessoryMana = accessories.stream().mapToInt(Accessory::getMana).sum();
+        int equipmentMana = equipments.stream().mapToInt(Equipment::getMana).sum();
+        mana = accessoryMana + equipmentMana + (2 * level) + mana;
+        return mana;
+    }
+
+    public int getRunSpeed(int level) {
+        int speedPlus = accessories.stream().mapToInt(Accessory::getSpeed).sum();
+        int speedMinus = equipments.stream().mapToInt(Equipment::getSpeed).sum();
+        runSpeed = (level) + speedPlus + runSpeed - (speedMinus);
+        return runSpeed;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public int getMaxXp() {
+        return maxXp;
+    }
+
+    public void gainXp(int n) {
+        xp += n;
+        levelUp();
+    }
+
+    public void attack(Fight opponent) {
+        System.out.println(this.name + " attacks " + opponent.getName() + "!");
+        opponent.takeDamage(this.getAtk(this.level));
+    }
+
+    public void takeDamage(int damage) {
+        if (isAlive()) {
+            int effectiveDamage = Math.max(0, damage - getDef(this.level));
+            hp -= effectiveDamage;
+
+            System.out.println(name + " takes " + effectiveDamage + " damage.");
+            System.out.println("Remaining HP: " + hp);
+            System.out.println("---------------------------------------");
+
+            if (!isAlive()) {
+                System.out.println(name + " has been defeated!");
+            }
+        }
+    }
+
+    public boolean isAlive() {
+        return hp > 0;
+    }
+    public static void Display(Mage m){
+        System.out.println("--------------------------------------------------------");
+        System.out.println("ชื่อ: " + m.getName());
+        System.out.println("อาชีพ: " + m.getJob());
+        System.out.println("Level: " + m.getLevel());
+        System.out.println("HP: " + m.getHp(m.getLevel()));
+        System.out.println("Attack: " + m.getAtk(m.getLevel()));
+        System.out.println("Defense: " + m.getDef(m.getLevel()));
+        System.out.println("Mana: " + m.getMana(m.getLevel()));
+        System.out.println("Run Speed: " + m.getRunSpeed(m.getLevel()));
+        System.out.println("Xp: " + m.getXp());
+        System.out.println("Max xp: " + m.getMaxXp());
+        System.out.println("--------------------------------------------------------");
+    }
+}

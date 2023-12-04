@@ -48,7 +48,8 @@ public class Character implements RPGcharactor, Fight {
 
     public int getHp(int level) {
         int accessoryHp = accessories.stream().mapToInt(Accessory::getHp).sum();
-        return hp + (10 * level) + accessoryHp;
+        hp =  hp + (10 * level) + accessoryHp;
+        return hp;
     }
 
     public int getLevel() {
@@ -58,24 +59,28 @@ public class Character implements RPGcharactor, Fight {
     public int getDef(int level) {
         int accessoryDef = accessories.stream().mapToInt(Accessory::getDefense).sum();
         int equipmentDef = equipments.stream().mapToInt(Equipment::getDefense).sum();
-        return accessoryDef + equipmentDef + (10 * level) + def;
+        def = accessoryDef + equipmentDef + (10 * level) + def;
+        return def;
     }
 
     public int getAtk(int level) {
         int accessoryAtk = equipments.stream().mapToInt(Equipment::getDamage).sum();
-        return accessoryAtk + (10 * level) + atk;
+        atk = accessoryAtk + (10 * level) + atk;
+        return atk;
     }
 
     public int getMana(int level) {
         int accessoryMana = accessories.stream().mapToInt(Accessory::getMana).sum();
         int equipmentMana = equipments.stream().mapToInt(Equipment::getMana).sum();
-        return accessoryMana + equipmentMana + (2 * level) + mana;
+        mana = accessoryMana + equipmentMana + (2 * level) + mana;
+        return mana;
     }
 
     public int getRunSpeed(int level) {
         int speedPlus = accessories.stream().mapToInt(Accessory::getSpeed).sum();
         int speedMinus = equipments.stream().mapToInt(Equipment::getSpeed).sum();
-        return (level) + speedPlus + runSpeed - (speedMinus);
+        runSpeed = (level) + speedPlus + runSpeed - (speedMinus);
+        return runSpeed;
     }
 
     public String getName() {
@@ -115,6 +120,7 @@ public class Character implements RPGcharactor, Fight {
 
             System.out.println(name + " takes " + effectiveDamage + " damage.");
             System.out.println("Remaining HP: " + hp);
+            System.out.println("---------------------------------------");
 
             if (!isAlive()) {
                 System.out.println(name + " has been defeated!");
@@ -124,5 +130,19 @@ public class Character implements RPGcharactor, Fight {
 
     public boolean isAlive() {
         return hp > 0;
+    }
+    public static void Display(Character character){
+        System.out.println("--------------------------------------------------------");
+        System.out.println("ชื่อ: " + character.getName());
+        System.out.println("อาชีพ: " + character.getJob());
+        System.out.println("Level: " + character.getLevel());
+        System.out.println("HP: " + character.getHp(character.getLevel()));
+        System.out.println("Attack: " + character.getAtk(character.getLevel()));
+        System.out.println("Defense: " + character.getDef(character.getLevel()));
+        System.out.println("Mana: " + character.getMana(character.getLevel()));
+        System.out.println("Run Speed: " + character.getRunSpeed(character.getLevel()));
+        System.out.println("Xp: " + character.getXp());
+        System.out.println("Max xp: " + character.getMaxXp());
+        System.out.println("--------------------------------------------------------");
     }
 }
