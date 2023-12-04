@@ -1,81 +1,144 @@
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class Warrior {
-//    private String name , Job;
-//    private int level , Exp , Max_Exp , Hp , Max_Hp = 100, Atk , Def , mana , Max_mana = 100 , runSpeed;
-//    private List<Equipment> Equipments;
-//
-//    public Warrior(String name, String Job) {
-//        this.name = name;
-//        this.Job = Job;
-//        this.level = 1;
-//        this.Exp = 200;
-//        this.Max_Exp = 100;
-//        this.Hp = this.Max_Hp;
-//        this.Atk = 20;
-//        this.Def = 25;
-//        this.mana = this.Max_mana;
-//        this.runSpeed = 10;
-//        this.Equipments = new ArrayList<>();
-//    }
-//    public void equipAccessory(List<Equipment> equipmentList) {
-//        for (Equipment equipment : equipmentList){
-//            if (equipment.getJob() == null || !equipment.getJob().equals(this.Job)) {
-//                System.out.println(this.name + " Can't equip " + equipment.getName());
-//            } else {
-//                this.Equipments.add(equipment);
-//                System.out.println(this.name + " Can put " + equipment.getName());
-//            }
-//        }
-//    }
-//
-//    public void display(String name , String job){
-//        Warrior warrior = new Warrior(name,job);
-//        System.out.println("-------------------------------------------");
-//        System.out.println("Warrior Stats:");
-//        System.out.println("-------------------------------------------");
-//        System.out.println("HP: " + warrior.getHp(warrior.getLevel()));
-//        System.out.println("ATK: " + warrior.getAtk(warrior.getLevel()));
-//        System.out.println("DEF: " + warrior.getDef(warrior.getLevel()));
-//        System.out.println("Mana: " + warrior.getMana(warrior.getLevel()));
-//        System.out.println("Run Speed: " + warrior.getRunSpeed(warrior.getLevel()));
-//        System.out.println("-------------------------------------------");
-//    }
-//
-//    public void UpLevel(){
-//        while (this.Exp >= this.Max_Exp){
-//            this.level++;
-//            this.Exp = this.Exp-this.Max_Exp;
-//            this.Max_Hp = (int) (this.Max_Exp*1.2);
-//        }
-//    }
-//
-//    public int getHp(int level) {
-//        return Hp + (10 * level);
-//    }
-//
-//    public int getLevel() {
-//        return level;
-//    }
-//
-//    public int getDef(int level) {
-//        int accessoryDef = Equipments.stream().mapToInt(Equipment::getDefense).sum();
-//        return accessoryDef + (10 * level) + Def;
-//    }
-//
-//    public int getAtk(int level) {
-//        int accessoryAtk = Equipments.stream().mapToInt(Equipment::getDamage).sum();
-//        return accessoryAtk + (10 * level) + Atk;
-//    }
-//
-//    public int getMana(int level) {
-//        int accessoryMana = Equipments.stream().mapToInt(Equipment::getMana).sum();
-//        return accessoryMana + (2 * level) + mana;
-//    }
-//
-//    public int getRunSpeed(int level) {
-//        int accessorySpeed = Equipments.stream().mapToInt(Equipment::getSpeed).sum();
-//        return (level) + runSpeed - (accessorySpeed);
-//    }
-//}
+import java.util.ArrayList;
+import java.util.List;
+
+public class Warrior implements RPGcharactor, Fight {
+    private String name, job;
+    private int level, hp, maxHp = 1000, atk, def, mana, maxMana = 100, runSpeed;
+    private int xp = 0, maxXp = 1000;
+    private List<Equipment> equipments;
+    private List<Accessory> accessories;
+
+    public Warrior(String name, String job, int atk, int def) {
+        this.name = name;
+        this.job = job;
+        this.level = 1;
+        this.hp = maxHp;
+        this.atk = atk;
+        this.def = def;
+        this.mana = maxMana;
+        this.runSpeed = 50;
+        this.equipments = new ArrayList<>();
+        this.accessories = new ArrayList<>();
+    }
+
+    public void equipWeapon(List<Equipment> equipmentList) {
+        for (Equipment equipment : equipmentList) {
+            if (equipment.getJob() == null || !equipment.getJob().equals(this.job)) {
+                System.out.println(this.name + " cannot equip " + equipment.getName());
+            } else {
+                this.equipments.add(equipment);
+                System.out.println(this.name + " equipped " + equipment.getName());
+            }
+        }
+    }
+
+    public void equipAccessory(List<Accessory> accessoryList) {
+        this.accessories.addAll(accessoryList);
+        accessoryList.forEach(accessory -> System.out.println(this.name + " equipped " + accessory.getName()));
+    }
+
+    public void levelUp() {
+        this.maxXp = 1000 * level;
+        while (this.xp >= this.maxXp) {
+            this.level++;
+            this.xp = this.xp - this.maxXp;
+            this.maxXp = 1000 * (2 * level);
+        }
+    }
+
+    public int getHp(int level) {
+        int accessoryHp = accessories.stream().mapToInt(Accessory::getHp).sum();
+        hp =  hp + (10 * level) + accessoryHp;
+        return hp;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getDef(int level) {
+        int accessoryDef = accessories.stream().mapToInt(Accessory::getDefense).sum();
+        int equipmentDef = equipments.stream().mapToInt(Equipment::getDefense).sum();
+        def = accessoryDef + equipmentDef + (10 * level) + def;
+        return def;
+    }
+
+    public int getAtk(int level) {
+        int accessoryAtk = equipments.stream().mapToInt(Equipment::getDamage).sum();
+        atk = accessoryAtk + (10 * level) + atk;
+        return atk;
+    }
+
+    public int getMana(int level) {
+        int accessoryMana = accessories.stream().mapToInt(Accessory::getMana).sum();
+        int equipmentMana = equipments.stream().mapToInt(Equipment::getMana).sum();
+        mana = accessoryMana + equipmentMana + (2 * level) + mana;
+        return mana;
+    }
+
+    public int getRunSpeed(int level) {
+        int speedPlus = accessories.stream().mapToInt(Accessory::getSpeed).sum();
+        int speedMinus = equipments.stream().mapToInt(Equipment::getSpeed).sum();
+        runSpeed = (level) + speedPlus + runSpeed - (speedMinus);
+        return runSpeed;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public int getMaxXp() {
+        return maxXp;
+    }
+
+    public void gainXp(int n) {
+        xp += n;
+        levelUp();
+    }
+
+    public void attack(Fight opponent) {
+        System.out.println(this.name + " attacks " + opponent.getName() + "!");
+        opponent.takeDamage(this.getAtk(this.level));
+    }
+
+    public void takeDamage(int damage) {
+        if (isAlive()) {
+            int effectiveDamage = Math.max(0, damage - getDef(this.level));
+            hp -= effectiveDamage;
+
+            System.out.println(name + " takes " + effectiveDamage + " damage.");
+            System.out.println("Remaining HP: " + hp);
+            System.out.println("---------------------------------------");
+
+            if (!isAlive()) {
+                System.out.println(name + " has been defeated!");
+            }
+        }
+    }
+
+    public boolean isAlive() {
+        return hp > 0;
+    }
+    public static void Display(Warrior w){
+        System.out.println("--------------------------------------------------------");
+        System.out.println("ชื่อ: " + w.getName());
+        System.out.println("อาชีพ: " + w.getJob());
+        System.out.println("Level: " + w.getLevel());
+        System.out.println("HP: " + w.getHp(w.getLevel()));
+        System.out.println("Attack: " + w.getAtk(w.getLevel()));
+        System.out.println("Defense: " + w.getDef(w.getLevel()));
+        System.out.println("Mana: " + w.getMana(w.getLevel()));
+        System.out.println("Run Speed: " + w.getRunSpeed(w.getLevel()));
+        System.out.println("Xp: " + w.getXp());
+        System.out.println("Max xp: " + w.getMaxXp());
+        System.out.println("--------------------------------------------------------");
+    }
+}

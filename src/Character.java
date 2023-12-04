@@ -120,6 +120,7 @@ public class Character implements RPGcharactor, Fight {
 
             System.out.println(name + " takes " + effectiveDamage + " damage.");
             System.out.println("Remaining HP: " + hp);
+            System.out.println("---------------------------------------");
 
             if (!isAlive()) {
                 System.out.println(name + " has been defeated!");
